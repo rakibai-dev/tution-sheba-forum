@@ -9,7 +9,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('')
   const [salaryMin, setSalaryMin] = useState('6000')
   const [salaryMax, setSalaryMax] = useState('')
-  const [teacherPreference, setTeacherPreference] = useState('all')
+  const [teacherPreference, setTeacherPreference] = useState('male')
   const [city, setCity] = useState('all')
 
   // Fetch data from API
@@ -88,7 +88,7 @@ function App() {
     setSearchTerm('')
     setSalaryMin('6000')
     setSalaryMax('')
-    setTeacherPreference('all')
+    setTeacherPreference('male')
     setCity('all')
   }
 
