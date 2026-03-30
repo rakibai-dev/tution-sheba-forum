@@ -7,7 +7,7 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
-  const [salaryMin, setSalaryMin] = useState('')
+  const [salaryMin, setSalaryMin] = useState('6000')
   const [salaryMax, setSalaryMax] = useState('')
   const [teacherPreference, setTeacherPreference] = useState('all')
   const [city, setCity] = useState('all')
@@ -47,8 +47,8 @@ function App() {
     .filter(v => v > 0)
     .sort((a, b) => a - b)
 
-  const minSalary = salaryValues[0] || 0
-  const maxSalary = salaryValues[salaryValues.length - 1] || 50000
+  const minSalary = 6000
+  const maxSalary = Math.max(minSalary, salaryValues[salaryValues.length - 1] || 50000)
 
   // Filter logic
   const filteredData = useMemo(() => {
@@ -86,7 +86,7 @@ function App() {
 
   const resetFilters = () => {
     setSearchTerm('')
-    setSalaryMin('')
+    setSalaryMin('6000')
     setSalaryMax('')
     setTeacherPreference('all')
     setCity('all')
@@ -193,6 +193,7 @@ function App() {
               </label>
               <input
                 type="number"
+                min={6000}
                 placeholder={`Min (${minSalary})`}
                 value={salaryMin}
                 onChange={(e) => setSalaryMin(e.target.value)}
