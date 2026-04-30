@@ -242,7 +242,7 @@ function App() {
             {skeletonItems.map((_, index) => (
               <div
                 key={`skeleton-${index}`}
-                className="bg-white rounded-lg shadow-md border border-gray-200 p-5 animate-pulse min-h-[520px] flex flex-col"
+                className="bg-white rounded-lg shadow-md border border-gray-200 p-5 animate-pulse min-h-130 flex flex-col"
               >
                 <div className="flex justify-between items-start mb-4 pb-3 border-b border-gray-100">
                   <div className="space-y-2">
