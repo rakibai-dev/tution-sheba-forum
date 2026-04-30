@@ -2,6 +2,12 @@ import { useState, useMemo, useEffect } from 'react'
 import TuitionCard from './components/TuitionCard'
 import './App.css'
 
+const getDaysPerWeek = (dayValue) => {
+  if (!dayValue) return null
+  const match = String(dayValue).match(/\d+/)
+  return match ? parseInt(match[0], 10) : null
+}
+
 function App() {
   const [tuitionData, setTuitionData] = useState([])
   const [loading, setLoading] = useState(true)
@@ -34,6 +40,7 @@ function App() {
 
     fetchTuitions()
   }, [])
+
 
   // Extract unique cities and salary values for filtering
   const cities = ['all', ...new Set(tuitionData.map(t => t.city?.toLowerCase()).filter(Boolean))]
@@ -80,7 +87,9 @@ function App() {
       const maxSalaryNum = salaryMax ? parseInt(salaryMax) : maxSalary
       const matchesSalary = tuitionSalary >= minSalaryNum && tuitionSalary <= maxSalaryNum
 
-      return matchesSearch && matchesCity && matchesTeacher && matchesSalary
+      const matchesDays = getDaysPerWeek(tuition.day) === 3
+
+      return matchesSearch && matchesCity && matchesTeacher && matchesSalary && matchesDays
     })
   }, [tuitionData, searchTerm, salaryMin, salaryMax, teacherPreference, city, minSalary, maxSalary])
 
@@ -129,6 +138,7 @@ function App() {
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-2">Tuition Forum</h1>
           <p className="text-gray-600">Explore {filteredData.length} of {tuitionData.length} available tuition opportunities</p>
+          <p className="text-sm text-gray-500">Showing only tuitions with 3 days/week</p>
         </div>
 
         {/* Filter Controls */}
