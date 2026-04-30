@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import TuitionCard from './components/TuitionCard'
 import './App.css'
 
@@ -257,6 +258,7 @@ function App() {
           </div>
         )}
       </div>
+      <Analytics />
     </div>
   )
 }
