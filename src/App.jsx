@@ -28,7 +28,6 @@ function App() {
   const [salaryMax, setSalaryMax] = useState('')
   const [teacherPreference, setTeacherPreference] = useState('male')
   const [studentGender, setStudentGender] = useState('female')
-  const [city, setCity] = useState('all')
 
   // Fetch data from API
   useEffect(() => {
@@ -54,9 +53,6 @@ function App() {
   }, [])
 
 
-  // Extract unique cities and salary values for filtering
-  const cities = ['all', ...new Set(tuitionData.map(t => t.city?.toLowerCase()).filter(Boolean))]
-  
   // Extract min/max salary for reference (parsing numeric values from salary strings)
   const salaryValues = tuitionData
     .map(t => {
@@ -81,9 +77,6 @@ function App() {
         tuition.area?.toLowerCase().includes(searchLower) ||
         tuition.tuitionCode?.includes(searchTerm)
 
-      // City filter
-      const matchesCity = city === 'all' || tuition.city?.toLowerCase() === city
-
       // Teacher preference filter
       const wantedTeacher = tuition.wantedTeacher || ''
       const hasMale = /\bmale\b/i.test(wantedTeacher)
@@ -105,9 +98,9 @@ function App() {
 
       const matchesDays = getDaysPerWeek(tuition.day) === 3
 
-      return matchesSearch && matchesCity && matchesTeacher && matchesStudentGender && matchesSalary && matchesDays
+      return matchesSearch && matchesTeacher && matchesStudentGender && matchesSalary && matchesDays
     })
-  }, [tuitionData, searchTerm, salaryMin, salaryMax, teacherPreference, studentGender, city, minSalary, maxSalary])
+  }, [tuitionData, searchTerm, salaryMin, salaryMax, teacherPreference, studentGender, minSalary, maxSalary])
 
   const displayFilteredCount = loading ? '...' : filteredData.length
   const displayTotalCount = loading ? '...' : tuitionData.length
@@ -119,7 +112,6 @@ function App() {
     setSalaryMax('')
     setTeacherPreference('male')
     setStudentGender('female')
-    setCity('all')
   }
 
   // Error state
@@ -154,7 +146,7 @@ function App() {
         <div className="bg-white rounded-lg shadow-md p-6 mb-8 border border-gray-200">
           <h2 className="text-xl font-bold text-gray-800 mb-4">Search & Filter</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
             {/* Search Term */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -168,25 +160,6 @@ function App() {
                 disabled={loading}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-gray-100"
               />
-            </div>
-
-            {/* City Filter */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                City
-              </label>
-              <select
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                disabled={loading}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-gray-100"
-              >
-                {cities.map(c => (
-                  <option key={c} value={c}>
-                    {c === 'all' ? 'All Cities' : c.charAt(0).toUpperCase() + c.slice(1)}
-                  </option>
-                ))}
-              </select>
             </div>
 
             {/* Teacher Preference */}
