@@ -8,6 +8,17 @@ const getDaysPerWeek = (dayValue) => {
   return match ? parseInt(match[0], 10) : null
 }
 
+const getStudentGenderKind = (studentValue) => {
+  if (!studentValue) return 'unknown'
+  const text = String(studentValue).toLowerCase()
+  const hasFemale = /(?:^|\b|\d)female\b/.test(text)
+  const hasMale = /(?:^|\b|\d)male\b/.test(text)
+  if (hasFemale && hasMale) return 'mixed'
+  if (hasFemale) return 'female'
+  if (hasMale) return 'male'
+  return 'unknown'
+}
+
 function App() {
   const [tuitionData, setTuitionData] = useState([])
   const [loading, setLoading] = useState(true)
@@ -16,6 +27,7 @@ function App() {
   const [salaryMin, setSalaryMin] = useState('6000')
   const [salaryMax, setSalaryMax] = useState('')
   const [teacherPreference, setTeacherPreference] = useState('male')
+  const [studentGender, setStudentGender] = useState('female')
   const [city, setCity] = useState('all')
 
   // Fetch data from API
@@ -80,6 +92,10 @@ function App() {
         (teacherPreference === 'male' && hasMale) ||
         (teacherPreference === 'female' && hasFemale)
 
+      // Student gender filter (loose any-match)
+      const studentKind = getStudentGenderKind(tuition.student)
+      const matchesStudentGender = studentGender === 'all' || studentKind === studentGender
+
       // Salary range filter
       const salaryMatch = tuition.salary?.match(/\d+/)
       const tuitionSalary = salaryMatch ? parseInt(salaryMatch[0]) : 0
@@ -89,9 +105,9 @@ function App() {
 
       const matchesDays = getDaysPerWeek(tuition.day) === 3
 
-      return matchesSearch && matchesCity && matchesTeacher && matchesSalary && matchesDays
+      return matchesSearch && matchesCity && matchesTeacher && matchesStudentGender && matchesSalary && matchesDays
     })
-  }, [tuitionData, searchTerm, salaryMin, salaryMax, teacherPreference, city, minSalary, maxSalary])
+  }, [tuitionData, searchTerm, salaryMin, salaryMax, teacherPreference, studentGender, city, minSalary, maxSalary])
 
   const displayFilteredCount = loading ? '...' : filteredData.length
   const displayTotalCount = loading ? '...' : tuitionData.length
@@ -102,6 +118,7 @@ function App() {
     setSalaryMin('6000')
     setSalaryMax('')
     setTeacherPreference('male')
+    setStudentGender('female')
     setCity('all')
   }
 
@@ -137,7 +154,7 @@ function App() {
         <div className="bg-white rounded-lg shadow-md p-6 mb-8 border border-gray-200">
           <h2 className="text-xl font-bold text-gray-800 mb-4">Search & Filter</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
             {/* Search Term */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -186,6 +203,24 @@ function App() {
                 <option value="all">All</option>
                 <option value="female">Female</option>
                 <option value="male">Male</option>
+              </select>
+            </div>
+
+            {/* Student Gender */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Student Gender
+              </label>
+              <select
+                value={studentGender}
+                onChange={(e) => setStudentGender(e.target.value)}
+                disabled={loading}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-gray-100"
+              >
+                <option value="all">All</option>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+                <option value="mixed">Mixed</option>
               </select>
             </div>
           </div>
