@@ -35,7 +35,8 @@ function App() {
       try {
         setLoading(true)
         setError(null)
-        const response = await fetch('https://tuition-seba-backend-1.onrender.com/api/tuition/available')
+        const apiUrl = import.meta.env.VITE_API_URL || 'https://api.tuitionsebaforum.com/api/tuition/available-web'
+        const response = await fetch(apiUrl)
         if (!response.ok) {
           throw new Error(`API error: ${response.status}`)
         }
