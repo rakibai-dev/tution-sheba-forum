@@ -1,16 +1,118 @@
-# React + Vite
+# Tuition Forum
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A small React + Vite frontend that lists available tuition opportunities fetched from the Tuition Seba backend. Users can search, filter by salary / teacher preference / student gender, and browse tuition cards in a responsive grid.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Fetches available tuitions from `https://api.tuitionsebaforum.com/api/tuition/available-web`
+- Search across class, subject, city, area, and tuition code
+- Filter by teacher preference (male / female / all)
+- Filter by student gender (male / female / mixed / all)
+- Filter by salary range (৳)
+- Fixed filter for tuitions with 3 days/week
+- Loading skeleton, error, and empty states
+- Vercel Analytics integration
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19
+- Vite 8 with `@vitejs/plugin-react`
+- Tailwind CSS v4 (via `@tailwindcss/vite`)
+- `@vercel/analytics` for usage tracking
+- ESLint 9 (`@eslint/js`, `react-hooks`, `react-refresh`)
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Prerequisites
+
+- Node.js (LTS recommended)
+- npm
+
+### Install
+
+```bash
+npm install
+```
+
+### Run the dev server
+
+```bash
+npm run dev
+```
+
+The app starts on the default Vite port (usually `http://localhost:5173`).
+
+### Build for production
+
+```bash
+npm run build
+```
+
+### Preview the production build
+
+```bash
+npm run preview
+```
+
+### Lint
+
+```bash
+npm run lint
+```
+
+## Project Structure
+
+```
+.
+├── index.html
+├── vite.config.js
+├── eslint.config.js
+├── package.json
+├── tuitions.json              # Sample/reference tuition data
+├── public/                    # Static assets
+└── src/
+    ├── main.jsx               # App entry point
+    ├── App.jsx                # Main page: fetching, filters, grid
+    ├── index.css              # Global CSS / Tailwind entry
+    ├── assets/
+    └── components/
+        └── TuitionCard.jsx    # Individual tuition card UI
+```
+
+## Styling
+
+Styling is done with Tailwind utility classes directly in JSX. See [`STYLE_GUIDE.md`](./STYLE_GUIDE.md) for the full styling reference (color palette, layout patterns, badge colors, state screens, etc.).
+
+## Data Source
+
+Live data is loaded from the Tuition Seba backend API at runtime. `tuitions.json` is included as a reference shape for a tuition record:
+
+```json
+{
+  "_id": "...",
+  "tuitionCode": "12365(A)",
+  "isPublish": true,
+  "isUrgent": false,
+  "wantedTeacher": "Female",
+  "student": "1 ( Female)",
+  "class": "2",
+  "medium": "Bangla Medium",
+  "subject": "All",
+  "time": "8PM-10PM",
+  "day": "5( 2 hour)",
+  "salary": "2000",
+  "location": "...",
+  "area": "Shershah",
+  "city": "chittagong",
+  "note": "...",
+  "joining": "As soon as"
+}
+```
+
+## Deployment
+
+The project is set up to be deployed on Vercel (a `.vercel/` directory is present and `@vercel/analytics` is wired in `App.jsx`). Run `npm run build` and deploy the `dist/` output.
+
+## License
+
+Private project — all rights reserved.
