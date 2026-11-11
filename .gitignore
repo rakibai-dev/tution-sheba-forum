@@ -28,3 +28,4 @@ dist-ssr
 !.env.example
 available-web.json
 STYLE_GUIDE.md
+TROUBLESHOOTING.md
