@@ -69,13 +69,15 @@ function App() {
   // Filter logic
   const filteredData = useMemo(() => {
     return tuitionData.filter(tuition => {
-      // Search term filter (class, subject, city, area)
+      // Search term filter (class, subject, city, area, demand, cancel reason, code)
       const searchLower = searchTerm.toLowerCase()
       const matchesSearch = !searchTerm || 
         tuition.class?.toLowerCase().includes(searchLower) ||
         tuition.subject?.toLowerCase().includes(searchLower) ||
         tuition.city?.toLowerCase().includes(searchLower) ||
         tuition.area?.toLowerCase().includes(searchLower) ||
+        tuition.guardianDemandForPublic?.toLowerCase().includes(searchLower) ||
+        tuition.tuitionCancelReasonPublic?.toLowerCase().includes(searchLower) ||
         tuition.tuitionCode?.includes(searchTerm)
 
       // Teacher preference filter
@@ -151,11 +153,11 @@ function App() {
             {/* Search Term */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Search by Class, Subject, City, Area
+                Search by Class, Subject, City, Area, Demand
               </label>
               <input
                 type="text"
-                placeholder="e.g., Class 4, English, Chittagong..."
+                placeholder="e.g., Class 4, English, CUET, Chittagong..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 disabled={loading}

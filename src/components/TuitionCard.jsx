@@ -10,6 +10,7 @@ export default function TuitionCard({ tuition }) {
 
   const isUrgent = tuition.isUrgent;
   const isPublished = tuition.isPublish;
+  const isCancelled = Boolean(tuition.tuitionCancelReasonPublic?.trim());
 
   return (
     <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow border border-gray-200 p-5">
@@ -20,6 +21,9 @@ export default function TuitionCard({ tuition }) {
           <p className="text-sm text-gray-500">Created: {formatDate(tuition.createdAt)}</p>
         </div>
         <div className="flex gap-2">
+          {isCancelled && (
+            <span className="bg-red-100 text-red-800 px-2 py-1 rounded text-xs font-semibold">Cancelled</span>
+          )}
           {isPublished ? (
             <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-semibold">Published</span>
           ) : (
@@ -30,6 +34,18 @@ export default function TuitionCard({ tuition }) {
           )}
         </div>
       </div>
+
+      {/* Cancellation Reason Banner */}
+      {isCancelled && (
+        <div className="mb-4 p-3 bg-red-50 rounded-lg border-l-4 border-red-500">
+          <p className="text-xs font-bold text-red-700 uppercase tracking-wider mb-1">
+            Tuition Cancel Reason
+          </p>
+          <p className="text-xs sm:text-sm text-red-900 font-medium whitespace-pre-line break-words">
+            {tuition.tuitionCancelReasonPublic.trim()}
+          </p>
+        </div>
+      )}
 
       {/* Student & Class Info */}
       <div className="grid grid-cols-2 gap-3 mb-4">
@@ -64,6 +80,16 @@ export default function TuitionCard({ tuition }) {
           <div className="flex justify-between">
             <span className="text-gray-600">Wanted:</span>
             <span className="font-semibold">{tuition.wantedTeacher || 'Any'}</span>
+          </div>
+          <div className="flex justify-between items-start gap-2">
+            <span className="text-gray-600 shrink-0">Guardian Demand:</span>
+            {tuition.guardianDemandForPublic?.trim() ? (
+              <span className="font-semibold text-right text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200 text-xs sm:text-sm break-words">
+                {tuition.guardianDemandForPublic.trim()}
+              </span>
+            ) : (
+              <span className="font-semibold text-gray-400">N/A</span>
+            )}
           </div>
           <div className="flex justify-between">
             <span className="text-gray-600">Contact:</span>
@@ -163,6 +189,16 @@ export default function TuitionCard({ tuition }) {
               <p className="italic">{tuition.nextUpdateComment}</p>
             </div>
           )}
+          <div className="flex justify-between items-start gap-2 pt-2 border-t border-purple-200">
+            <span className="text-gray-600 shrink-0">Cancel Reason:</span>
+            {isCancelled ? (
+              <span className="font-semibold text-right text-red-700 break-words">
+                {tuition.tuitionCancelReasonPublic.trim()}
+              </span>
+            ) : (
+              <span className="text-gray-400 font-semibold">None</span>
+            )}
+          </div>
         </div>
       </div>
 
