@@ -100,26 +100,24 @@ export async function clearTeachersCache() {
 }
 
 /**
- * Fetch a single page from API, with fallback to direct host if proxy fails
+ * Fetch a single page from internal serverless proxy
  */
 async function fetchTeacherPage(page, limit = 1000, signal) {
-  const proxyUrl = `/api/regTeacher/public-teachers?page=${page}&limit=${limit}`;
-  const directUrl = `https://api.tuitionsebaforum.com/api/regTeacher/public-teachers?page=${page}&limit=${limit}`;
+  const endpoint = `/api/teachers?page=${encodeURIComponent(page)}&limit=${encodeURIComponent(limit)}`;
+  const res = await fetch(endpoint, {
+    credentials: 'include',
+    signal,
+  });
 
-  try {
-    const res = await fetch(proxyUrl, { signal });
-    if (res.ok) {
-      return await res.json();
-    }
-  } catch {
-    // If proxy failed, attempt direct fetch
+  if (res.status === 401) {
+    throw new Error('Session expired or unauthorized. Please re-login.');
   }
 
-  const resDirect = await fetch(directUrl, { signal });
-  if (!resDirect.ok) {
-    throw new Error(`API error: ${resDirect.status} ${resDirect.statusText}`);
+  if (!res.ok) {
+    throw new Error(`API error: ${res.status} ${res.statusText}`);
   }
-  return await resDirect.json();
+
+  return await res.json();
 }
 
 /**

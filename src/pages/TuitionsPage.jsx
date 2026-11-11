@@ -34,8 +34,12 @@ export default function TuitionsPage() {
       try {
         setLoading(true);
         setError(null);
-        const apiUrl = import.meta.env.VITE_API_URL || '/api/tuition/available-web';
-        const response = await fetch(apiUrl);
+        const response = await fetch('/api/tuitions', {
+          credentials: 'include',
+        });
+        if (response.status === 401) {
+          throw new Error('Session expired or unauthorized. Please refresh and log in.');
+        }
         if (!response.ok) {
           throw new Error(`API error: ${response.status}`);
         }
