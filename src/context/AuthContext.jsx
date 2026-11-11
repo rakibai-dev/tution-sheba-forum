@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { clearTeachersCache } from '../services/teacherStorage';
+import { clearTeachersCache, abortOngoingSync } from '../services/teacherStorage';
 
 const AuthContext = createContext(null);
 
@@ -88,6 +88,9 @@ export function AuthProvider({ children }) {
 
   // Logout handler (clears session and purges local offline database)
   const logout = async () => {
+    // 1. Immediately abort any in-flight teacher sync requests
+    abortOngoingSync();
+
     try {
       await fetch('/.netlify/functions/auth/logout', {
         method: 'POST',

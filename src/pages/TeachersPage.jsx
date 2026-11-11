@@ -11,6 +11,7 @@ import TeacherModal from '../components/TeacherModal';
 import {
   getCachedTeachers,
   fetchAndSyncAllTeachers,
+  abortOngoingSync,
 } from '../services/teacherStorage';
 import { exportTeachersToCSV, exportTeachersToJSON } from '../utils/exportTeachers';
 
@@ -103,6 +104,7 @@ export default function TeachersPage() {
 
     return () => {
       isMounted = false;
+      abortOngoingSync();
     };
   }, [triggerSync]);
 
