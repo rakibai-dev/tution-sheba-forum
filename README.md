@@ -4,12 +4,20 @@ A small React + Vite frontend that lists available tuition opportunities fetched
 
 ## Features
 
-- Fetches available tuitions from `https://api.tuitionsebaforum.com/api/tuition/available-web`
-- Search across class, subject, city, area, and tuition code
-- Filter by teacher preference (male / female / all)
-- Filter by student gender (male / female / mixed / all)
-- Filter by salary range (৳)
-- Fixed filter for tuitions with 3 days/week
+- **Tuition Opportunities**: Fetches available tuitions from `https://api.tuitionsebaforum.com/api/tuition/available-web`
+  - Search across class, subject, city, area, and tuition code
+  - Filter by teacher preference (male / female / all)
+  - Filter by student gender (male / female / mixed / all)
+  - Filter by salary range (৳)
+  - Fixed filter for tuitions with 3 days/week
+- **Teachers Directory (`/teachers`)**: Ingests all 13,500+ registered public teachers from `https://api.tuitionsebaforum.com/api/regTeacher/public-teachers`
+  - Automated background batch fetching with live progress indicator
+  - Offline-first IndexedDB persistence for instant repeat page loads
+  - Advanced multi-criteria search and filters (search any field, gender, area, university/institute, academic year)
+  - Smooth client-side infinite scroll
+  - Teacher detail modal with comprehensive educational history (SSC, HSC, Honors, Masters)
+  - One-click Export to CSV and JSON (for filtered or entire datasets)
+- Responsive navigation bar with client-side routing via React Router
 - Loading skeleton, error, and empty states
 - Vercel Analytics integration
 
