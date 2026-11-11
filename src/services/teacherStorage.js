@@ -103,7 +103,7 @@ export async function clearTeachersCache() {
  * Fetch a single page from internal serverless proxy
  */
 async function fetchTeacherPage(page, limit = 1000, signal) {
-  const endpoint = `/api/teachers?page=${encodeURIComponent(page)}&limit=${encodeURIComponent(limit)}`;
+  const endpoint = `/.netlify/functions/teachers?page=${encodeURIComponent(page)}&limit=${encodeURIComponent(limit)}`;
   const res = await fetch(endpoint, {
     credentials: 'include',
     signal,

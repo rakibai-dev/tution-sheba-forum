@@ -12,7 +12,8 @@ function localNetlifyFunctionsPlugin() {
       server.middlewares.use(async (req, res, next) => {
         try {
           const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`)
-          if (!url.pathname.startsWith('/api/')) {
+          const isApi = url.pathname.startsWith('/api/') || url.pathname.startsWith('/.netlify/functions/')
+          if (!isApi) {
             return next()
           }
 
@@ -24,19 +25,19 @@ function localNetlifyFunctionsPlugin() {
           }
 
           let result = null
-          if (url.pathname.startsWith('/api/auth')) {
+          if (url.pathname.includes('/auth')) {
             result = await handleAuthRequest({
               method: req.method,
               path: url.pathname,
               headers: req.headers,
               body,
             })
-          } else if (url.pathname === '/api/tuitions') {
+          } else if (url.pathname.endsWith('/tuitions')) {
             result = await handleTuitionsRequest({
               method: req.method,
               headers: req.headers,
             })
-          } else if (url.pathname === '/api/teachers') {
+          } else if (url.pathname.endsWith('/teachers')) {
             const queryStringParameters = Object.fromEntries(url.searchParams.entries())
             result = await handleTeachersRequest({
               method: req.method,

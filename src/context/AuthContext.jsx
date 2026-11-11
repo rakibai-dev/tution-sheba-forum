@@ -13,7 +13,7 @@ export function AuthProvider({ children }) {
   const checkAuth = useCallback(async () => {
     try {
       setIsLoading(true);
-      const res = await fetch('/api/auth/verify', {
+      const res = await fetch('/.netlify/functions/auth/verify', {
         credentials: 'include',
       });
       if (res.ok) {
@@ -37,20 +37,34 @@ export function AuthProvider({ children }) {
   const login = async (password) => {
     setAuthError(null);
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await fetch('/.netlify/functions/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({ password }),
       });
 
-      const data = await res.json();
+      let data = {};
+      const contentType = res.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        try {
+          data = await res.json();
+        } catch {
+          // ignore
+        }
+      }
 
       if (res.ok) {
         setIsAuthenticated(true);
         setLockedUntil(null);
         setAuthError(null);
         return { success: true };
+      }
+
+      if (res.status === 500) {
+        const msg = data.error || 'Server configuration error: missing ADMIN_PASSWORD or JWT_SECRET on Netlify.';
+        setAuthError(msg);
+        return { success: false, error: msg };
       }
 
       if (res.status === 429) {
@@ -61,7 +75,7 @@ export function AuthProvider({ children }) {
 
       const msg = data.remainingAttempts != null
         ? `${data.error}. ${data.remainingAttempts} attempts remaining.`
-        : (data.error || 'Login failed');
+        : (data.error || `Login failed (${res.status} ${res.statusText || 'Error'})`);
 
       setAuthError(msg);
       return { success: false, error: msg };
@@ -75,7 +89,7 @@ export function AuthProvider({ children }) {
   // Logout handler (clears session and purges local offline database)
   const logout = async () => {
     try {
-      await fetch('/api/auth/logout', {
+      await fetch('/.netlify/functions/auth/logout', {
         method: 'POST',
         credentials: 'include',
       });

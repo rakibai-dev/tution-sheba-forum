@@ -34,7 +34,7 @@ export default function TuitionsPage() {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch('/api/tuitions', {
+        const response = await fetch('/.netlify/functions/tuitions', {
           credentials: 'include',
         });
         if (response.status === 401) {
