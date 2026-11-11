@@ -4,15 +4,17 @@ A small React + Vite frontend that lists available tuition opportunities fetched
 
 ## Features
 
-- **Tuition Opportunities**: Fetches available tuitions from `https://api.tuitionsebaforum.com/api/tuition/available-web`
+- **Protected Access**: Master password lock screen with brute-force rate limiting and httpOnly JWT session cookies
+- **Tuition Opportunities**: Authenticated access to available tuition listings via private serverless proxy
   - Search across class, subject, city, area, and tuition code
   - Filter by teacher preference (male / female / all)
   - Filter by student gender (male / female / mixed / all)
   - Filter by salary range (৳)
   - Fixed filter for tuitions with 3 days/week
-- **Teachers Directory (`/teachers`)**: Ingests all 13,500+ registered public teachers from `https://api.tuitionsebaforum.com/api/regTeacher/public-teachers`
+- **Teachers Directory (`/teachers`)**: Private paginated teacher ingestion through authenticated serverless endpoints
   - Automated background batch fetching with live progress indicator
   - Offline-first IndexedDB persistence for instant repeat page loads
+  - Privacy-preserving logout that completely wipes local IndexedDB cache
   - Advanced multi-criteria search and filters (search any field, gender, area, university/institute, academic year)
   - Smooth client-side infinite scroll
   - Teacher detail modal with comprehensive educational history (SSC, HSC, Honors, Masters)
@@ -41,6 +43,18 @@ A small React + Vite frontend that lists available tuition opportunities fetched
 ```bash
 npm install
 ```
+
+### Environment Setup
+
+Create a `.env` file at the root (see `.env.example`):
+
+```bash
+ADMIN_PASSWORD=your-secure-password
+JWT_SECRET=your-random-32-char-jwt-secret
+UPSTREAM_API_BASE=https://api.tuitionsebaforum.com
+```
+
+In production, configure these same variables in the Netlify Dashboard (**Site configuration → Environment variables**).
 
 ### Run the dev server
 

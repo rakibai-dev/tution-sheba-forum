@@ -118,6 +118,13 @@ This project uses Tailwind CSS utilities directly in JSX. There is no custom the
 
 ## State & Feedback Screens
 
+- **Lock Screen (`LockScreen.jsx`)**:
+  - Background: Fullscreen gradient (`min-h-screen bg-linear-to-br from-blue-50 to-indigo-100/60 flex items-center justify-center p-4`)
+  - Card: Centered white container (`bg-white rounded-2xl shadow-xl border border-gray-200 p-8 max-w-md w-full text-center`)
+  - Icon: Centered circle (`w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 shadow-inner`)
+  - Inputs: Floating icon input (`pl-10 pr-12 py-2.5 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500`)
+  - Primary button: Full width unlock button (`w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md`)
+  - Lockout alert: Orange alert banner (`mb-5 p-4 rounded-lg bg-orange-50 border border-orange-200 text-orange-800 text-sm font-semibold`)
 - **Sync Progress Banner**:
   - Container: `mb-6 p-4 rounded-lg bg-blue-50 border border-blue-200`
   - Text & percentage: `text-sm text-blue-900 font-semibold`
